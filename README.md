@@ -10,14 +10,14 @@ Fully implemented:
   - REST support (with jQuery)
 - REST API
 - Markdown support
-- SQLite database
+- SQLAlchemy support
+  - SQLite database only
 
 Partially implemented:
 - Configuration file (can add configuration to further locations)
   - YAML 
   
 Planned:
-- SQLAlchemy support
 - Different database support
 - Login
 - Multi-user support
