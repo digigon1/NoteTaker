@@ -1,4 +1,3 @@
-import sqlite3
 import typing
 
 from model.storage import Storage
