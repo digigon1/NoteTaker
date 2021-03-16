@@ -22,4 +22,5 @@ Planned:
 - Login
 - Multi-user support
 - HTTPS support
+- Better logging
 - Android app
