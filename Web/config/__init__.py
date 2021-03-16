@@ -12,8 +12,7 @@ __config = {
 
 def init(file='config/default.yaml'):
     with open(file, 'r') as f:
-        __config = yaml.load(f)
-    print(__config)
+        __config = yaml.load(f, Loader=yaml.FullLoader)
 
 def get(key):
     curr = __config

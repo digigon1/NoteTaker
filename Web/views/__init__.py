@@ -11,4 +11,4 @@ class Views:
         return render_template('notes.html', notes=notes)
 
     def show_note(self, note):
-        return render_template('note.html', title=note['title'], content=note['content'])
+        return render_template('note.html', title=note.title, content=note.content)
