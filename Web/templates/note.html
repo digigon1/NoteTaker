@@ -1,0 +1,36 @@
+<html>
+    {% include "head.html" %}
+    <body>
+        {% include "header.html" %}
+        <main>
+            <h1 class="center">
+                {{ title }}
+            </h1>
+            <div class="content row">
+                <div class="col s10 m10 offset-m1 xl8 offset-xl2">
+                    {{ content|markdown }}
+                </div>
+            </div>
+            <div class="fixed-action-btn">
+                <a class="btn-floating btn-large waves-effect waves-light modal-trigger" href="#modal-edit">
+                    <i class="far fa-edit"></i>
+                </a>
+            </div>
+
+            <!-- Modal for editing note -->
+            <div id="modal-edit" class="modal">
+                <div class="modal-content row">
+                    <label for="title">Title</label>
+                    <input placeholder="Title" id="title" type="text" value="{{ title }}">
+
+                    <textarea placeholder="Content" id="content" class="materialize-textarea">{{ content }}</textarea>
+                </div>
+                <div class="modal-footer">
+                    <a href="#!" class="modal-close waves-effect waves-red btn-flat modal-close">Cancel</a>
+                    <a href="#!" class="modal-close waves-effect waves-green btn-flat modal-close" onclick="updateNote()">Update</a>
+                </div>
+            </div>
+
+        </main>
+    </body>
+</html>

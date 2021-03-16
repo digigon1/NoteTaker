@@ -1,0 +1,13 @@
+app:
+  debug: False
+
+db:
+  type: "file"
+  file: "files.db"
+
+  # host: None
+  # username: None
+  # password: None
+  # database: None
+
+  # conn_str: None

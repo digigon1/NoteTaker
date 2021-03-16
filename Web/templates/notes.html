@@ -1,0 +1,57 @@
+<html>
+    {% include "head.html" %}
+    <body>
+        {% include "header.html" %}
+        <main class="row">
+            <div class="col s10 m10 offset-m1 xl8 offset-xl2">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for note in notes %}
+                        <tr>
+                            <td><a href="{{ url_for('show_note', note_id=note['note_id']) }}">{{ note['title'] }}</a></td>
+                            <td class="right"><a onclick="deleteConfirm({{ note['note_id'] }})"><i class="fa fa-trash"></i></a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="fixed-action-btn">
+                <a class="btn-floating btn-large waves-effect waves-light modal-trigger" href="#modal-add">
+                    <i class="fa fa-plus"></i>
+                </a>
+            </div>
+
+            <!-- Modal for adding new note -->
+            <div id="modal-add" class="modal">
+                <div class="modal-content row">
+                    <div class="input-field col s12">
+                        <input placeholder="Title" id="title" type="text">
+                        <label for="title">Note title</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a href="#!" class="modal-close waves-effect waves-red btn-flat modal-close">Cancel</a>
+                    <a href="#!" class="modal-close waves-effect waves-green btn-flat modal-close" onclick="createNote()">Create</a>
+                </div>
+            </div>
+
+            <!-- Modal for confirming note deletion -->
+            <div id="modal-delete" class="modal">
+                <div class="modal-content row">
+                    Are you sure you want to delete the note?
+                </div>
+                <div class="modal-footer">
+                    <a href="#!" class="modal-close waves-effect waves-red btn-flat modal-close">Cancel</a>
+                    <a href="#!" class="modal-close waves-effect waves-green btn-flat modal-close" id="confirm-delete">Delete</a>
+                </div>
+            </div>
+
+        </main>
+    </body>
+</html>

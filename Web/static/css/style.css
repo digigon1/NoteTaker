@@ -1,0 +1,14 @@
+.btn-floating .fa-plus, .btn-floating .fa-edit {
+    transform: scale(1.8); 
+    height: 56px;
+}
+
+.content li {
+    list-style-type: initial !important;
+}
+
+@media only screen and (min-width: 993px) {
+    .brand-logo {
+        padding-left: 30px !important;
+    }
+}
