@@ -17,7 +17,7 @@ Fully implemented:
   - YAML 
 
 Planned:
-- Login
+- Authentication
 - Multi-user support
 - HTTPS support
 - Better logging
