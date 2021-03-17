@@ -11,14 +11,12 @@ Fully implemented:
 - REST API
 - Markdown support
 - SQLAlchemy support
-  - SQLite database only
-
-Partially implemented:
-- Configuration file (can add configuration to further locations)
+  - SQLite database
+  - Multiple databases via connection strings
+- Configuration file
   - YAML 
-  
+
 Planned:
-- Different database support
 - Login
 - Multi-user support
 - HTTPS support
