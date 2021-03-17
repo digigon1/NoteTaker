@@ -8,13 +8,29 @@ from model.storage.tables import *
 
 class Storage:
     def __init__(self, config):
-        if config.get('db.type') == 'file':
+        db_type = config.get('db.type')
+        connect_args = {}
+        if db_type == 'file':
             conn_str = 'sqlite:///' + config.get('db.file')
+            # TODO: try to avoid this, 
+            # can cause database corruption if multiple writing operations exist
+            connect_args['check_same_thread'] = False
+        elif db_type == 'string':
+            conn_str = config.get('db.conn_str')
         else:
-            conn_str = ''  # Not implemented yet
+            username = config.get('db.username')
+            password = config.get('db.password')
+            host = config.get('db.host')
+            port = config.get('db.port')
+            if port:
+                host += ':' + port
+            database = config.get('db.database')
+            
+            # Try to use db_type as dialect
+            conn_str = f'{db_type}://{username}:{password}@{host}/{database}'
         
         # Create sqlalchemy engine
-        engine = create_engine(conn_str)
+        engine = create_engine(conn_str, connect_args=connect_args)
 
         # Create tables if non-existant
         Base.metadata.create_all(engine)

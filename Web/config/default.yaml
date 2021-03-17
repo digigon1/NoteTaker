@@ -2,12 +2,13 @@ app:
   debug: False
 
 db:
-  type: "file"
+  type: "file"  # Or "string" to provide connection string
   file: "files.db"
 
-  # host: None
-  # username: None
-  # password: None
-  # database: None
+  host: None
+  port: None
+  username: None
+  password: None
+  database: None
 
-  # conn_str: None
+  conn_str: None
