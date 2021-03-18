@@ -16,9 +16,11 @@ Fully implemented:
 - Configuration file
   - YAML 
 
-Planned:
+Partially implemented:
 - Authentication
 - Multi-user support
+
+Planned:
 - HTTPS support
 - Better logging
 - Android app
