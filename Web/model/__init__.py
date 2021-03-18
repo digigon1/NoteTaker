@@ -29,3 +29,10 @@ class Model:
             return None  # Error, at least one must be updated
 
         return self.storage.update_note(note_id, title, content)
+
+    # User related functions
+    def get_user(self, username: str):
+        return self.storage.get_user(username)
+
+    def create_user(self, username: str, password: str):
+        return self.storage.create_user(username, password)

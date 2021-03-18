@@ -1,5 +1,7 @@
 import typing
 
+import bcrypt
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.sql import select
@@ -38,6 +40,7 @@ class Storage:
         # Create session
         self.session = sessionmaker(engine)()
     
+    # Notes related methods
     def get_all_notes(self):
         return self.session.query(Note).all()
     
@@ -91,3 +94,23 @@ class Storage:
         except Exception as e:
             print(e)
             return None
+
+    # User related methods
+    def get_user(self, username: str):
+        try:
+            return self.session.query(User).get(username)
+        except Exception as e:
+            print(e)
+            return None
+
+    def create_user(self, username: str, password: str):
+        try:
+            salt = bcrypt.gensalt()
+            hashed_password = bcrypt.hashpw(password, salt)
+            new_user = User(username=username, password=hashed_password)
+            self.session.add(new_user)
+            self.session.commit()
+            return True
+        except Exception as e:
+            print(e)
+            return False

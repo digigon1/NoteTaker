@@ -37,6 +37,7 @@ def show_note(note_id: int):
 
 
 # REST interface
+# Note related endpoints
 @app.route('/api/notes/', methods=['GET'])
 def list_notes():
 	result = model.list_notes()
@@ -93,6 +94,32 @@ def update_note(note_id: int):
 
     return ('', http.client.NO_CONTENT)
 
+# User related endpoints
+@app.route('/api/users/', methods=['PUT'])
+def create_user():
+    if request.form and request.form['username'] and request.form['password']:
+        if model.create_user(request.form['username'], request.form['password']):
+            return ('', http.client.NO_CONTENT)
+        else:
+            return abort(http.client.INTERNAL_SERVER_ERROR)
+    else:
+        return abort(http.client.BAD_REQUEST, message='Missing username and/or password')
+
+# Authentication related endpoints
+@app.route('/api/auth/', methods=['POST'])
+def authenticate():
+    if request.form and request.form['username'] and request.form['password']:
+        user = model.get_user(request.form['username'])
+        if user:
+            if user.check_password(request.form['password']):
+                # TODO: store user authentication somehow
+                pass
+            else:
+                return abort(http.client.UNAUTHORIZED, message='Wrong username or password')
+        else:
+            return abort(http.client.UNAUTHORIZED, message='Wrong username or password')
+    else:
+        return abort(http.client.BAD_REQUEST, message='Missing username and/or password')
 
 # Run flask app
 if __name__ == "__main__":
