@@ -1,3 +1,7 @@
+html, body {
+    height: 100%;
+}
+
 .btn-floating .fa-plus, .btn-floating .fa-edit {
     transform: scale(1.8); 
     height: 56px;
