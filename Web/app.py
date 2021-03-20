@@ -13,6 +13,10 @@ import config
 
 # Setup
 config.init()
+
+Model.init(config)
+Views.init(config)
+
 api = API.create(config)  # REST interface
 pages = Pages.create(config)  # Views
 

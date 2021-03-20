@@ -7,20 +7,18 @@ from model import Model
 class API():
     @staticmethod
     def create(config):
-        model = Model(config)
-
         api = Blueprint('api', __name__)
 
         # Note related endpoints
         @api.route('/notes/', methods=['GET'])
         def list_notes():
-            result = model.list_notes()
+            result = Model.get().list_notes()
             return (jsonify(result), http.client.OK)
 
         @api.route('/notes/', methods=['PUT'])
         def create_note():
             if request.form and request.form['title']:
-                new_id = model.create_note(request.form['title'])
+                new_id = Model.get().create_note(request.form['title'])
 
                 if new_id != None:
                     return (str(new_id), http.client.OK)
@@ -31,7 +29,7 @@ class API():
 
         @api.route('/notes/<int:note_id>', methods=['GET'])
         def get_note(note_id: int):
-            result = model.get_note(note_id)
+            result = Model.get().get_note(note_id)
 
             if result:
                 return result
@@ -40,7 +38,7 @@ class API():
             
         @api.route('/notes/<int:note_id>', methods=['DELETE'])
         def delete_note(note_id: int):
-            result = model.delete_note(note_id)
+            result = Model.get().delete_note(note_id)
 
             if result == None:
                 return abort(http.client.INTERNAL_SERVER_ERROR)
@@ -58,7 +56,7 @@ class API():
             if not request.form['title'] and not request.form['content']:
                 abort(http.client.BAD_REQUEST, message='No changes given')
 
-            result = model.update_note(note_id, request.form['title'], request.form['content'])
+            result = Model.get().update_note(note_id, request.form['title'], request.form['content'])
 
             if result == None:
                 return abort(http.client.INTERNAL_SERVER_ERROR)
@@ -72,7 +70,7 @@ class API():
         @api.route('/users/', methods=['PUT'])
         def create_user():
             if request.form and request.form['username'] and request.form['password']:
-                if model.create_user(request.form['username'], request.form['password']):
+                if Model.get().create_user(request.form['username'], request.form['password']):
                     return ('', http.client.NO_CONTENT)
                 else:
                     return abort(http.client.INTERNAL_SERVER_ERROR)
@@ -83,7 +81,7 @@ class API():
         @api.route('/auth/', methods=['POST'])
         def authenticate():
             if request.form and request.form['username'] and request.form['password']:
-                user = model.get_user(request.form['username'])
+                user = Model.get().get_user(request.form['username'])
                 if user:
                     if user.check_password(request.form['password']):
                         # TODO: store user authentication somehow
