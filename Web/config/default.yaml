@@ -1,5 +1,5 @@
 app:
-  debug: False
+  debug: True
 
 db:
   type: "file"  # Or "string" to provide connection string

@@ -14,7 +14,7 @@
                     <tbody>
                         {% for note in notes %}
                         <tr>
-                            <td><a href="{{ url_for('show_note', note_id=note.id) }}">{{ note.title }}</a></td>
+                            <td><a href="{{ url_for('pages.show_note', note_id=note.id) }}">{{ note.title }}</a></td>
                             <td class="right"><a onclick="deleteConfirm({{ note.id }})"><i class="fa fa-trash"></i></a></td>
                         </tr>
                         {% endfor %}

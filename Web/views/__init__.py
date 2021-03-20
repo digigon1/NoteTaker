@@ -7,6 +7,9 @@ class Views:
         pass
 
     # Building pages
+    def login(self):
+        return render_template('login.html')
+
     def list_notes(self, notes):
         return render_template('notes.html', notes=notes)
 
