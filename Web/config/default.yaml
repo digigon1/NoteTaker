@@ -1,14 +1,26 @@
 app:
   debug: True
+  secret_key: 'secret_key'
+  https_mode: "adhoc"
+
+  # https_mode: No  # http only, not recommended
+
+  # https_mode: "cert"
+  # cert:
+    # cert: "cert.pem"
+    # key: "key.pem"
+
 
 db:
-  type: "file"  # Or "string" to provide connection string
+  type: "file"
   file: "files.db"
 
-  host: None
-  port: None
-  username: None
-  password: None
-  database: None
+  # type: "details"
+  host: null
+  port: null
+  username: null
+  password: null
+  database: null
 
-  conn_str: None
+  # type: "string"
+  conn_str: null

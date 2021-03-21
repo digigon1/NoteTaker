@@ -28,13 +28,32 @@ Markdown(app)
 
 # Run flask app
 if __name__ == "__main__":
+    # Setup debug option
     debug = False
-    
     if config.get('app.debug'):
         app.jinja_env.auto_reload = True
         app.config['TEMPLATES_AUTO_RELOAD'] = True
         debug = True
 
-    app.secret_key = 'secret_key'
+    # Setup sessions
+    secret_key = config.get('app.secret_key')
+    if not secret_key:
+        app.secret_key = 'secret_key'
 
-    app.run(host='0.0.0.0', debug=debug)
+    # Setup https and launch
+    https_support = config.get('app.https_mode')
+    if not https_support:
+        print('here')
+        app.run(host='0.0.0.0', debug=debug)
+    elif https_support == 'adhoc':
+        app.run(host='0.0.0.0', debug=debug, ssl_context='adhoc')
+    elif https_support == 'cert':
+        cert = config.get('app.cert')
+        if cert:
+            app.run(host='0.0.0.0', debug=debug, ssl_context=(cert.cert, cert.key))
+        else:
+            # Try with default names
+            app.run(host='0.0.0.0', debug=debug, ssl_context=('cert.pem', 'key.pem'))
+    else:
+        # Just launch without https
+        app.run(host='0.0.0.0', debug=debug)
