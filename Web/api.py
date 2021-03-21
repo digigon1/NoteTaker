@@ -1,8 +1,24 @@
 import http
+import functools
 
-from flask import Blueprint, jsonify, abort, request
+from flask import Blueprint, jsonify, abort, request, session
+import jwt
 
 from model import Model
+
+jwt_instance = jwt.JWT()
+
+def check_auth(func):
+    @functools.wraps(func)
+    def decorated(*args, **kwargs):
+        token = request.form['token']
+        if not token:
+            return abort(http.client.UNAUTHORIZED)
+        
+        # TODO: add jwt decoding and verification
+
+        return func(*args, **kwargs)
+    return decorated
 
 class API():
     @staticmethod
@@ -84,8 +100,9 @@ class API():
                 user = Model.get().get_user(request.form['username'])
                 if user:
                     if user.check_password(request.form['password']):
-                        # TODO: store user authentication somehow
-                        pass
+                        # TODO: create and return JWT
+                        
+                        return ('', http.client.NO_CONTENT)
                     else:
                         return abort(http.client.UNAUTHORIZED, message='Wrong username or password')
                 else:

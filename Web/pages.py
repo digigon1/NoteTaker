@@ -1,7 +1,7 @@
 import http
 import functools
 
-from flask import Blueprint, jsonify, abort, request, session
+from flask import Blueprint, jsonify, abort, request, session, redirect
 
 from model import Model
 from views import Views
@@ -24,8 +24,12 @@ class Pages():
         @pages.route('/')
         @pages.route('/login/')
         def login():
-            session['user'] = 'test'  # Debug
             return Views.get().login()
+
+        @pages.route('/logout/')
+        def logout():
+            del session['user']
+            return redirect('/')
 
         @pages.route('/notes/')
         @check_auth
