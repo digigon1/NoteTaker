@@ -15,12 +15,12 @@ Fully implemented:
   - Multiple databases via connection strings
 - Configuration file
   - YAML 
+- HTTPS support
 
 Partially implemented:
 - Authentication
 - Multi-user support
 
 Planned:
-- HTTPS support
 - Better logging
 - Android app
