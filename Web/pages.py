@@ -21,6 +21,8 @@ def check_auth(func):
         if not user:
             return redirect('/')
         
+        kwargs['user'] = user
+
         return func(*args, **kwargs)
     return decorated
 
@@ -34,25 +36,25 @@ class Pages():
         def login():
             if 'token' in session:
                 return redirect('/notes/')
-                
+
             return Views.get().login()
 
         @pages.route('/logout/')
         @check_auth
-        def logout():
+        def logout(user):
             del session['token']
             return redirect('/')
 
         @pages.route('/notes/')
         @check_auth
-        def show_all_notes():
-            results = Model.get().list_notes()
+        def show_all_notes(user):
+            results = Model.get().list_notes(user)
             return Views.get().list_notes(results)
 
         @pages.route('/notes/<int:note_id>')
         @check_auth
-        def show_note(note_id: int):
-            note = Model.get().get_note(note_id)
+        def show_note(note_id: int, user):
+            note = Model.get().get_note(note_id, user)
             if note:
                 return Views.get().show_note(note)
             else:

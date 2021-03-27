@@ -1,6 +1,6 @@
 import bcrypt
 
-from sqlalchemy import Column, String, Integer, Binary
+from sqlalchemy import Column, String, Integer, Binary, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -11,6 +11,7 @@ class Note(Base):
     id = Column(Integer, primary_key=True)
     title = Column(String, nullable=False)
     content = Column(String, server_default='')
+    creator = Column(String, ForeignKey('users.username'), nullable=False)
 
 class User(Base):
     __tablename__ = 'users'

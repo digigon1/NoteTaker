@@ -21,7 +21,7 @@ def check_auth(func):
         if not user:
             return abort(http.client.UNAUTHORIZED)
 
-        request.form['user'] = user
+        kwargs['user'] = user
 
         return func(*args, **kwargs)
     return decorated
@@ -34,15 +34,15 @@ class API():
         # Note related endpoints
         @api.route('/notes/', methods=['GET'])
         @check_auth
-        def list_notes():
-            result = Model.get().list_notes()
+        def list_notes(user):
+            result = Model.get().list_notes(user)
             return (jsonify(result), http.client.OK)
 
         @api.route('/notes/', methods=['PUT'])
         @check_auth
-        def create_note():
+        def create_note(user):
             if request.form and request.form['title']:
-                new_id = Model.get().create_note(request.form['title'])
+                new_id = Model.get().create_note(request.form['title'], user)
 
                 if new_id != None:
                     return (str(new_id), http.client.OK)
@@ -53,8 +53,8 @@ class API():
 
         @api.route('/notes/<int:note_id>', methods=['GET'])
         @check_auth
-        def get_note(note_id: int):
-            result = Model.get().get_note(note_id)
+        def get_note(note_id: int, user):
+            result = Model.get().get_note(note_id, user)
 
             if result:
                 return result
@@ -63,8 +63,8 @@ class API():
             
         @api.route('/notes/<int:note_id>', methods=['DELETE'])
         @check_auth
-        def delete_note(note_id: int):
-            result = Model.get().delete_note(note_id)
+        def delete_note(note_id: int, user):
+            result = Model.get().delete_note(note_id, user)
 
             if result == None:
                 return abort(http.client.INTERNAL_SERVER_ERROR)
@@ -76,14 +76,14 @@ class API():
 
         @api.route('/notes/<int:note_id>', methods=['POST'])
         @check_auth
-        def update_note(note_id: int):
+        def update_note(note_id: int, user):
             if not request.form:
                 abort(http.client.BAD_REQUEST)
 
             if not request.form['title'] and not request.form['content']:
                 abort(http.client.BAD_REQUEST, message='No changes given')
 
-            result = Model.get().update_note(note_id, request.form['title'], request.form['content'])
+            result = Model.get().update_note(note_id, user, request.form['title'], request.form['content'])
 
             if result == None:
                 return abort(http.client.INTERNAL_SERVER_ERROR)

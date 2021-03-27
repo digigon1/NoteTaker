@@ -43,20 +43,20 @@ class Storage:
         self.session = sessionmaker(engine)()
     
     # Notes related methods
-    def get_all_notes(self):
-        return self.session.query(Note).all()
+    def get_all_notes(self, user: str):
+        return self.session.query(Note).filter_by(creator=user).all()
     
-    def get_note(self, id: int):
+    def get_note(self, id: int, user: str):
         try:
-            return self.session.query(Note).get(id)
+            return self.session.query(Note).filter_by(creator=user, id=id).first()
         except Exception as e:
             self.session.rollback()
             print(e)
             return None
 
-    def create_note(self, title: str):
+    def create_note(self, title: str, creator: str):
         try:
-            new_note = Note(title=title)
+            new_note = Note(title=title, creator=creator)
             self.session.add(new_note)
             self.session.flush()  # Make note be stored
             self.session.refresh(new_note)  # Get stored id
@@ -68,9 +68,9 @@ class Storage:
             print(e)
             return None
 
-    def delete_note(self, id: int):
+    def delete_note(self, id: int, user: str):
         try:
-            note = self.session.query(Note).get(id)
+            note = self.session.query(Note).filter_by(creator=user, id=id).first()
             if note:
                 self.session.delete(note)
                 self.session.commit()
@@ -82,9 +82,9 @@ class Storage:
             print(e)
             return None
     
-    def update_note(self, id: int, title: typing.Optional[str], content: typing.Optional[str]):
+    def update_note(self, id: int, user: str, title: typing.Optional[str], content: typing.Optional[str]):
         try:
-            note = self.session.query(Note).get(id)
+            note = self.session.query(Note).filter_by(creator=user, id=id).first()
             if not note:
                 return False
 
