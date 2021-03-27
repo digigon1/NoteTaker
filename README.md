@@ -16,8 +16,6 @@ Fully implemented:
 - Configuration file
   - YAML 
 - HTTPS support
-
-Partially implemented:
 - Authentication
 - Multi-user support
 
