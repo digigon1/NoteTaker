@@ -16,7 +16,7 @@ def init(file='config/default.yaml'):
     with open(file, 'r') as f:
         __config = yaml.load(f, Loader=yaml.FullLoader)
 
-def get(key):
+def get(key: str):
     global __config
     
     curr = __config

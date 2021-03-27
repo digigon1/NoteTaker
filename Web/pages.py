@@ -41,19 +41,19 @@ class Pages():
 
         @pages.route('/logout/')
         @check_auth
-        def logout(user):
+        def logout(user: str):
             del session['token']
             return redirect('/')
 
         @pages.route('/notes/')
         @check_auth
-        def show_all_notes(user):
+        def show_all_notes(user: str):
             results = Model.get().list_notes(user)
             return Views.get().list_notes(results)
 
         @pages.route('/notes/<int:note_id>')
         @check_auth
-        def show_note(note_id: int, user):
+        def show_note(note_id: int, user: str):
             note = Model.get().get_note(note_id, user)
             if note:
                 return Views.get().show_note(note)

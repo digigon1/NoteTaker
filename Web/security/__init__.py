@@ -15,14 +15,14 @@ class JWT:
             JWT.verifying_key = jwt.jwk_from_pem(f.read())
     
     @classmethod
-    def encode(cls, user):
+    def encode(cls, user: str):
         return JWT.__instance.encode({
             'user': user,
             'iat': get_int_from_datetime(datetime.datetime.now())
         }, JWT.signing_key, alg='RS256')
 
     @classmethod
-    def decode(cls, token):
+    def decode(cls, token: str):
         try:
             return JWT.__instance.decode(token, JWT.verifying_key)['user']
         except Exception as e:

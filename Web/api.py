@@ -34,13 +34,13 @@ class API():
         # Note related endpoints
         @api.route('/notes/', methods=['GET'])
         @check_auth
-        def list_notes(user):
+        def list_notes(user: str):
             result = Model.get().list_notes(user)
             return (jsonify(result), http.client.OK)
 
         @api.route('/notes/', methods=['PUT'])
         @check_auth
-        def create_note(user):
+        def create_note(user: str):
             if request.form and request.form['title']:
                 new_id = Model.get().create_note(request.form['title'], user)
 
@@ -53,7 +53,7 @@ class API():
 
         @api.route('/notes/<int:note_id>', methods=['GET'])
         @check_auth
-        def get_note(note_id: int, user):
+        def get_note(note_id: int, user: str):
             result = Model.get().get_note(note_id, user)
 
             if result:
@@ -63,7 +63,7 @@ class API():
             
         @api.route('/notes/<int:note_id>', methods=['DELETE'])
         @check_auth
-        def delete_note(note_id: int, user):
+        def delete_note(note_id: int, user: str):
             result = Model.get().delete_note(note_id, user)
 
             if result == None:
@@ -76,7 +76,7 @@ class API():
 
         @api.route('/notes/<int:note_id>', methods=['POST'])
         @check_auth
-        def update_note(note_id: int, user):
+        def update_note(note_id: int, user: str):
             if not request.form:
                 abort(http.client.BAD_REQUEST)
 

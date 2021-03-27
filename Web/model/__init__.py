@@ -17,11 +17,11 @@ class Model:
         self.storage = Storage(config)
 
     # All notes functions
-    def list_notes(self, user):
+    def list_notes(self, user: str):
         return self.storage.get_all_notes(user)
 
     # Single note functions
-    def get_note(self, note_id: int, user):
+    def get_note(self, note_id: int, user: str):
         return self.storage.get_note(note_id, user)
         
     def create_note(self, title: str, creator: str):
