@@ -1,15 +1,18 @@
 app:
   debug: True
   secret_key: 'secret_key'
-  https_mode: "adhoc"
+  # https_mode: "adhoc"
 
-  # https_mode: No  # http only, not recommended
+  https_mode: No  # http only, not recommended
 
   # https_mode: "cert"
   # cert:
     # cert: "cert.pem"
     # key: "key.pem"
 
+jwt:
+  private: "config/jwt.priv"
+  public: "config/jwt.pub.pem"
 
 db:
   type: "file"

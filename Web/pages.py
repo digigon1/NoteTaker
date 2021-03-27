@@ -5,13 +5,21 @@ from flask import Blueprint, jsonify, abort, request, session, redirect
 
 from model import Model
 from views import Views
+from security import JWT
 
 def check_auth(func):
     @functools.wraps(func)
     def decorated(*args, **kwargs):
-        user = session.get('user')
+        try:
+            token = session['token']
+            if not token:
+                return redirect('/')
+        except Exception as _:
+            return redirect('/')
+        
+        user = JWT.decode(token)
         if not user:
-            return abort(http.client.UNAUTHORIZED)
+            return redirect('/')
         
         return func(*args, **kwargs)
     return decorated
@@ -24,11 +32,15 @@ class Pages():
         @pages.route('/')
         @pages.route('/login/')
         def login():
+            if 'token' in session:
+                return redirect('/notes/')
+                
             return Views.get().login()
 
         @pages.route('/logout/')
+        @check_auth
         def logout():
-            del session['user']
+            del session['token']
             return redirect('/')
 
         @pages.route('/notes/')

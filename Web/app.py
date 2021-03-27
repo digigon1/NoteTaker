@@ -8,6 +8,7 @@ from pages import Pages
 
 from views import Views
 from model import Model
+from security import JWT
 import config
 
 
@@ -16,13 +17,16 @@ config.init()
 
 Model.init(config)
 Views.init(config)
-
-api = API.create(config)  # REST interface
-pages = Pages.create(config)  # Views
+JWT.init(config)
 
 app = Flask('Note Taker')
+
+api = API.create(config)  # REST interface
 app.register_blueprint(api, url_prefix='/api')
+
+pages = Pages.create(config)  # Views
 app.register_blueprint(pages)
+
 Markdown(app)
 
 
@@ -38,12 +42,12 @@ if __name__ == "__main__":
     # Setup sessions
     secret_key = config.get('app.secret_key')
     if not secret_key:
-        app.secret_key = 'secret_key'
+        secret_key = 'secret_key'
+    app.secret_key = secret_key
 
     # Setup https and launch
     https_support = config.get('app.https_mode')
     if not https_support:
-        print('here')
         app.run(host='0.0.0.0', debug=debug)
     elif https_support == 'adhoc':
         app.run(host='0.0.0.0', debug=debug, ssl_context='adhoc')

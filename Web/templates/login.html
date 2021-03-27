@@ -20,6 +20,29 @@
                     <div class="button col s4 m4 offset-m2 xl2 offset-xl4">
                         <a class="waves-effect waves-light btn" onclick="login()">Login</a>
                     </div>
+                    <div class="button col s4 m4 xl2">
+                        <a class="waves-effect waves-light btn modal-trigger" href="#modal-add-user">New User</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal for adding new user -->
+            <div id="modal-add-user" class="modal">
+                <div class="modal-content row">
+                    <div class="input-field col s12">
+                        <input placeholder="Username" id="username-add" type="text">
+                        <label for="username-add">Username</label>
+                    </div>
+                </div>
+                <div class="modal-content row">
+                    <div class="input-field col s12">
+                        <input placeholder="Password" id="password-add" type="text">
+                        <label for="password-add">Password</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a href="#!" class="modal-close waves-effect waves-red btn-flat modal-close">Cancel</a>
+                    <a href="#!" class="modal-close waves-effect waves-green btn-flat modal-close" onclick="createUser()">Create</a>
                 </div>
             </div>
         </main>

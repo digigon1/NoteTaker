@@ -50,6 +50,7 @@ class Storage:
         try:
             return self.session.query(Note).get(id)
         except Exception as e:
+            self.session.rollback()
             print(e)
             return None
 
@@ -63,6 +64,7 @@ class Storage:
             self.session.commit()
             return new_id
         except Exception as e:
+            self.session.rollback()
             print(e)
             return None
 
@@ -76,6 +78,7 @@ class Storage:
             else:
                 return False
         except Exception as e:
+            self.session.rollback()
             print(e)
             return None
     
@@ -94,6 +97,7 @@ class Storage:
             self.session.commit()
             return True
         except Exception as e:
+            self.session.rollback()
             print(e)
             return None
 
@@ -102,17 +106,19 @@ class Storage:
         try:
             return self.session.query(User).get(username)
         except Exception as e:
+            self.session.rollback()
             print(e)
             return None
 
     def create_user(self, username: str, password: str):
         try:
             salt = bcrypt.gensalt()
-            hashed_password = bcrypt.hashpw(password, salt)
+            hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt)
             new_user = User(username=username, password=hashed_password)
             self.session.add(new_user)
             self.session.commit()
             return True
         except Exception as e:
+            self.session.rollback()
             print(e)
             return False

@@ -1,17 +1,16 @@
 from flask import render_template
 
-_instance = None
 
 class Views:
+    __instance = None
+    
     @classmethod
     def get(cls):
-        global _instance
-        return _instance
+        return Views.__instance
     
     @classmethod
     def init(cls, config):
-        global _instance
-        _instance = Views(config)
+        Views.__instance = Views(config)
 
     def __init__(self, config):
         # No need for config yet, pass for consistency

@@ -1,21 +1,27 @@
 import http
 import functools
 
-from flask import Blueprint, jsonify, abort, request, session
+from flask import Blueprint, jsonify, abort, request, session, make_response
 import jwt
 
 from model import Model
-
-jwt_instance = jwt.JWT()
+from security import JWT
 
 def check_auth(func):
     @functools.wraps(func)
     def decorated(*args, **kwargs):
-        token = request.form['token']
+        token = request.cookies.get('token')
         if not token:
-            return abort(http.client.UNAUTHORIZED)
+            token = request.headers['Authorization']
+            if not token:
+                return abort(http.client.UNAUTHORIZED)
         
-        # TODO: add jwt decoding and verification
+        # TODO: extend verification based on user
+        user = JWT.decode(token)
+        if not user:
+            return abort(http.client.UNAUTHORIZED)
+
+        request.form['user'] = user
 
         return func(*args, **kwargs)
     return decorated
@@ -27,11 +33,13 @@ class API():
 
         # Note related endpoints
         @api.route('/notes/', methods=['GET'])
+        @check_auth
         def list_notes():
             result = Model.get().list_notes()
             return (jsonify(result), http.client.OK)
 
         @api.route('/notes/', methods=['PUT'])
+        @check_auth
         def create_note():
             if request.form and request.form['title']:
                 new_id = Model.get().create_note(request.form['title'])
@@ -44,6 +52,7 @@ class API():
                 return abort(http.client.BAD_REQUEST, message='Missing title')
 
         @api.route('/notes/<int:note_id>', methods=['GET'])
+        @check_auth
         def get_note(note_id: int):
             result = Model.get().get_note(note_id)
 
@@ -53,6 +62,7 @@ class API():
                 abort(http.client.NOT_FOUND)
             
         @api.route('/notes/<int:note_id>', methods=['DELETE'])
+        @check_auth
         def delete_note(note_id: int):
             result = Model.get().delete_note(note_id)
 
@@ -65,6 +75,7 @@ class API():
             return ('', http.client.NO_CONTENT)
 
         @api.route('/notes/<int:note_id>', methods=['POST'])
+        @check_auth
         def update_note(note_id: int):
             if not request.form:
                 abort(http.client.BAD_REQUEST)
@@ -99,10 +110,12 @@ class API():
             if request.form and request.form['username'] and request.form['password']:
                 user = Model.get().get_user(request.form['username'])
                 if user:
-                    if user.check_password(request.form['password']):
-                        # TODO: create and return JWT
-                        
-                        return ('', http.client.NO_CONTENT)
+                    if user.check_password(request.form['password'].encode('utf-8')):
+                        token = JWT.encode(user.username)
+                        response = make_response(token, http.client.OK)
+                        response.set_cookie('token', token)
+                        session['token'] = token
+                        return response
                     else:
                         return abort(http.client.UNAUTHORIZED, message='Wrong username or password')
                 else:

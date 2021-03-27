@@ -2,18 +2,16 @@ import typing
 
 from model.storage import Storage
 
-_instance = None
-
 class Model:
+    __instance = None
+    
     @classmethod
-    def get(cls):
-        global _instance
-        return _instance
+    def get(cls) -> 'Model':
+        return Model.__instance
     
     @classmethod
     def init(cls, config):
-        global _instance
-        _instance = Model(config)
+        Model.__instance = Model(config)
 
     def __init__(self, config):
         self.storage = Storage(config)
