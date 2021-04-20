@@ -1,6 +1,6 @@
 import bcrypt
 
-from sqlalchemy import Column, String, Integer, Binary, ForeignKey
+from sqlalchemy import Column, String, Integer, LargeBinary, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -17,7 +17,7 @@ class User(Base):
     __tablename__ = 'users'
 
     username = Column(String, nullable=False, primary_key=True)
-    password = Column(Binary(60), nullable=False)
+    password = Column(LargeBinary(60), nullable=False)
 
     def check_password(self, password: bytes):
         return bcrypt.checkpw(password, self.password)
